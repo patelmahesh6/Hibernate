@@ -6,6 +6,7 @@
 package com.panthera.controller;
 
 import com.panthera.model.Person;
+import com.panthera.service.HibernateSearchService;
 import com.panthera.service.PersonService;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,9 @@ public class PersonController {
     @Autowired
     PersonService personService;
 
+    @Autowired
+    private HibernateSearchService searchservice;
+
     @GetMapping(value = "person", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<Person>> getAllVehicle() {
         List<Person> personList = new ArrayList<>();
@@ -44,4 +48,17 @@ public class PersonController {
         return new ResponseEntity<>(personList, HttpStatus.OK);
     }
 
+    /*@RequestMapping(value = "/personSearch", method = RequestMethod.GET)
+    public String search(@RequestParam(value = "search", required = false) String q, Model model) {
+        List<Person> searchResults = null;
+        try {
+            searchResults = searchservice.fuzzySearch(q);
+
+        } catch (Exception ex) {
+        }
+        model.addAttribute("search", searchResults);
+        return "index";
+
+    }
+*/
 }
