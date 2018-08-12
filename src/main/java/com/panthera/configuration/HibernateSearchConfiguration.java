@@ -5,27 +5,35 @@
  */
 package com.panthera.configuration;
 
-import com.panthera.service.HibernateSearchService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Administrator
  */
-//@Configuration
-public class HibernateSearchConfiguration {
+@Component
+public class HibernateSearchConfiguration implements ApplicationListener<ApplicationReadyEvent> {
 
-   /*@PersistenceContext
-    private EntityManager em;*/
+    @Autowired
+    EntityManager em;
 
-  /*  @Bean
-    HibernateSearchService hibernateSearchService() {
-        HibernateSearchService hibernateSearchService = new HibernateSearchService(em);
-        hibernateSearchService.initializeHibernateSearch();
-        return hibernateSearchService;
-    }*/
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        try {
+            FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+            fullTextEntityManager.createIndexer().startAndWait();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(HibernateSearchConfiguration.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

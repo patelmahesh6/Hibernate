@@ -1,5 +1,6 @@
 ## YAML Template.
 ---
+debug: true
 spring:
   jpa:
     database: mysql
@@ -7,8 +8,12 @@ spring:
     generate-ddl: true
     hibernate: 
       ddl-auto: create  
-
-
+    properties:
+        hibernate:
+            search:
+                default:
+                    directory_provider: filesystem
+                    indexBase : D:\Projects\Hibernate
 multitenancy: 
   apps: 
     dataSources: 
@@ -30,9 +35,8 @@ logging:
   pattern:
     console: "%d %-5level %logger : %msg%n"
   level:
-    org:
-      hibernate:
-        type: trace
+   org.springframework.web: DEBUG
+   org.springframework.beans: DEBUG
+   org.hibernate: trace
         
         
-     

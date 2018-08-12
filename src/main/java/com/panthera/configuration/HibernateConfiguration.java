@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
-import org.hibernate.search.cfg.impl.SearchConfigurationFromHibernateCore;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Primary;
@@ -67,8 +66,9 @@ public class HibernateConfiguration {
         });
         return result;
     }
-
-    @Bean
+     
+    @Primary
+    @Bean(name = "entityManager")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(MultiTenantConnectionProvider multiTenantConnectionProviderImpl,
             CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl) {
         Map<String, Object> properties = new HashMap<>();

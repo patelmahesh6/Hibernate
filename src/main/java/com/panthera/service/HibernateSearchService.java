@@ -9,7 +9,6 @@ import com.panthera.model.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -25,24 +24,8 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 @Service
 public class HibernateSearchService {
 
-    @PersistenceContext
-    private final EntityManager entityManager;
-
     @Autowired
-    public HibernateSearchService(EntityManager entityManager) {
-        super();
-        this.entityManager = entityManager;
-    }
-
-    public void initializeHibernateSearch() {
-
-        try {
-            FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-            fullTextEntityManager.createIndexer().startAndWait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+    EntityManager entityManager;
 
     @Transactional
     public List<Person> fuzzySearch(String searchTerm) {
@@ -54,12 +37,11 @@ public class HibernateSearchService {
 
         javax.persistence.Query jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, Person.class);
 
-        // execute search
+        //execute search
         List<Person> personList = null;
         try {
             personList = jpaQuery.getResultList();
         } catch (NoResultException nre) {
-            ;// do nothing
 
         }
 
