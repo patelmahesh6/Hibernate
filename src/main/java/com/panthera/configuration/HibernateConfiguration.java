@@ -66,8 +66,9 @@ public class HibernateConfiguration {
         });
         return result;
     }
-
-    @Bean
+     
+    @Primary
+    @Bean(name = "entityManager")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(MultiTenantConnectionProvider multiTenantConnectionProviderImpl,
             CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl) {
         Map<String, Object> properties = new HashMap<>();
